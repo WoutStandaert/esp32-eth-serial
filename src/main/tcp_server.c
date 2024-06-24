@@ -120,11 +120,7 @@ static void do_bridge(int sock, struct server_port* srv)
         if (idle)
             vTaskDelay(1);
     }
-    for (;;) {
-        int const left = uart_read_bytes(srv->uart, srv->buff, BUFF_SZ, 8);
-        if (left <= 0)
-            break;
-    }
+
     gpio_set_level(CONFIG_BRIDGE_LED_GPIO, 0);
 }
 
