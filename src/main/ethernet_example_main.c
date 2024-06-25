@@ -82,6 +82,20 @@ void app_main(void)
         // default esp-netif configuration parameters.
         esp_netif_config_t cfg = ESP_NETIF_DEFAULT_ETH();
         esp_netif_t *eth_netif = esp_netif_new(&cfg);
+
+        esp_netif_dhcpc_stop(eth_netif);
+        char* ip= "192.168.135.103";
+        char* gateway = "192.168.135.1";
+        char* netmask = "255.255.255.0";
+        esp_netif_ip_info_t info_t;
+        memset(&info_t, 0, sizeof(esp_netif_ip_info_t));
+
+        info_t.ip.addr = esp_ip4addr_aton((const char *)ip);
+        info_t.gw.addr = esp_ip4addr_aton((const char *)gateway);;
+        info_t.netmask.addr = esp_ip4addr_aton((const char *)netmask);;
+
+        esp_netif_set_ip_info(eth_netif, &info_t);
+        
         // Attach Ethernet driver to TCP/IP stack
         ESP_ERROR_CHECK(esp_netif_attach(eth_netif, esp_eth_new_netif_glue(eth_handles[0])));
     } else {
@@ -103,6 +117,19 @@ void app_main(void)
             esp_netif_config.if_desc = if_desc_str;
             esp_netif_config.route_prio -= i*5;
             esp_netif_t *eth_netif = esp_netif_new(&cfg_spi);
+
+            esp_netif_dhcpc_stop(eth_netif);
+            char* ip= "192.168.135.103";
+            char* gateway = "192.168.135.1";
+            char* netmask = "255.255.255.0";
+            esp_netif_ip_info_t info_t;
+            memset(&info_t, 0, sizeof(esp_netif_ip_info_t));
+
+            info_t.ip.addr = esp_ip4addr_aton((const char *)ip);
+            info_t.gw.addr = esp_ip4addr_aton((const char *)gateway);;
+            info_t.netmask.addr = esp_ip4addr_aton((const char *)netmask);;
+
+            esp_netif_set_ip_info(eth_netif, &info_t);
 
             // Attach Ethernet driver to TCP/IP stack
             ESP_ERROR_CHECK(esp_netif_attach(eth_netif, esp_eth_new_netif_glue(eth_handles[i])));
